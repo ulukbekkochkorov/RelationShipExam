@@ -1,6 +1,8 @@
 package org.example.config;
 
-import org.example.entity.User;
+import org.example.entity.School;
+import org.example.entity.Section;
+import org.example.entity.Student;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.cfg.Environment;
@@ -15,12 +17,15 @@ public class Config {
         properties.put(Environment.USER, "postgres");
         properties.put(Environment.PASS, "2406");
 
-        properties.put(Environment.HBM2DDL_AUTO, "update");
+        properties.put(Environment.HBM2DDL_AUTO, "create");
         properties.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
         properties.put(Environment.SHOW_SQL, "true");
+
         Configuration configuration = new Configuration();
         configuration.addProperties((properties));
-        configuration.addAnnotatedClass(User.class);
+        configuration.addAnnotatedClass(Student.class);
+        configuration.addAnnotatedClass(Section.class);
+        configuration.addAnnotatedClass(School.class);
 
         return configuration.buildSessionFactory();
     }

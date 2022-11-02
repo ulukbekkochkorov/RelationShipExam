@@ -5,12 +5,17 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+import java.util.ArrayList;
+import java.util.List;
+
+import static jakarta.persistence.CascadeType.*;
+
 @Entity
-@Table(name = "Users")
+@Table(name = "students")
 @Getter
 @Setter
 @NoArgsConstructor
-public class User {
+public class Student {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
@@ -22,7 +27,15 @@ public class User {
 
     private Long age;
 
-    public User(String name, String lastName, Long age) {
+    @ManyToOne(cascade = {DETACH, REFRESH, MERGE, PERSIST})
+    private School school;
+
+    @ManyToMany(cascade = ALL)
+    @JoinTable(name = "student_section",
+            joinColumns = @JoinColumn(name = "student_id", referencedColumnName = "id"),
+            inverseJoinColumns = @JoinColumn(name = "section_id", referencedColumnName = "id"))
+    private List<Section> sections = new ArrayList<>();
+    public Student(String name, String lastName, Long age) {
         this.name = name;
         this.lastName = lastName;
         this.age = age;
@@ -30,7 +43,7 @@ public class User {
 
     @Override
     public String toString() {
-        return "User{" +
+        return "Student{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
                 ", lastName='" + lastName + '\'' +
